@@ -9,11 +9,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Mengatur folder 'website' sebagai folder statis
-app.use(express.static(path.join(__dirname, 'website')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Route utama untuk memanggil index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'website', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, () => {
