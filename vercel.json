@@ -2,6 +2,10 @@
   "version": 2,
   "public": true,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/website/$1" }
+    {
+      "source": "/(.*)",
+      "destination": "/website/$1"
+    }
   ]
 }
+
