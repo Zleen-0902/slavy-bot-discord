@@ -4,17 +4,17 @@ const Sticky = require('../../models/Sticky');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('stick')
-        .setDescription('📌 Mengaktifkan pesan sticky via MongoDB')
-        .addStringOption(opt => opt.setName('pesan').setDescription('Isi pesan sticky').setRequired(true))
+        .setDescription('📌 Enabling sticky messages (default)')
+        .addStringOption(opt => opt.setName('message').setDescription('Sticky message content').setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
-        const content = interaction.options.getString('pesan');
-        const formattedContent = `━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 **PENGUMUMAN PENTING**\n\n${content}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        const content = interaction.options.getString('message');
+        const formattedContent = `━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 **STICKY MESSAGES**\n\n${content}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
         try {
-            // Find one and update (upsert: true artinya kalau belum ada maka buat baru)
+            // Find one and update (upsert: true means if it doesn't exist then create a new one)
             await Sticky.findOneAndUpdate(
                 { guildId: interaction.guildId },
                 { 
@@ -26,11 +26,11 @@ module.exports = {
             );
 
             return interaction.editReply({
-                content: `✅ **Berhasil!** Data disimpan di MongoDB Atlas.\nChannel: <#${interaction.channelId}>`
+                content: `✅ **Success!** Creating a Sticky Message.\nChannel: <#${interaction.channelId}>`
             });
         } catch (error) {
             console.error(error);
-            return interaction.editReply('❌ Terjadi kesalahan pada database MongoDB.');
+            return interaction.editReply('❌ An error occurred in the Sticky Message');
         }
     },
 };

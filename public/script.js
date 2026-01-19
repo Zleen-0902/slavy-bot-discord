@@ -1,6 +1,6 @@
-// --- 1. Animasi Muncul Saat Scroll (Scroll Reveal) ---
+// --- 1. Animation Appears When Scrolling (Scroll Reveal) ---
 const observerOptions = {
-    threshold: 0.15 // Elemen akan muncul jika 15% bagian sudah terlihat
+    threshold: 0.15 // The element will appear when 15% of the part is visible.
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -11,12 +11,12 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Daftarkan semua elemen yang ingin diberi efek muncul
+// List all the elements you want to give a pop-up effect to.
 document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.feature-card, .section-title, .table-container, .hero-content');
     
     revealElements.forEach(el => {
-        el.classList.add('reveal-hidden'); // Berikan status awal (sembunyi)
+        el.classList.add('reveal-hidden'); // Provide initial status (hidden)
         observer.observe(el);
     });
 });
@@ -35,7 +35,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// --- 3. Smooth Scroll untuk Link Navigasi ---
+// --- 3. Smooth Scroll for Navigation Links ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -43,14 +43,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         if (target) {
             window.scrollTo({
-                top: target.offsetTop - 80, // Offset agar tidak tertutup navbar
+                top: target.offsetTop - 80, // Offset so that it is not covered by the navbar
                 behavior: 'smooth'
             });
         }
     });
 });
 
-// --- 4. Efek Interaktif pada Tombol (Hover Glow) ---
+// --- 4. Interactive Effects on Buttons (Hover Glow) ---
 const buttons = document.querySelectorAll('.btn-gold');
 buttons.forEach(btn => {
     btn.addEventListener('mousemove', (e) => {

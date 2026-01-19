@@ -1,13 +1,26 @@
 {
   "name": "slavybot",
   "version": "1.0.0",
-  "description": "Slavy Bot Discord is a sticky messages bot",
+  "description": "Slavy Bot Discorf a usefully moderations",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Enzzyx",
+  "keywords": [
+    "discord",
+    "bot",
+    "dashboard",
+    "discord-bot",
+    "discord-js",
+    "utility",
+    "sticky",
+    "administration"
+  ],
+  "author": { 
+    name: "Enzzyx",
+    email: "",
+    url: "https://guns.lol/enzzyx"
+  },
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

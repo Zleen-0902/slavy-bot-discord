@@ -23,7 +23,7 @@ console.log(`${colors.cyan}=================================================${co
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
     
-    // Pastikan yang dibaca adalah folder
+    // Make sure what is being read is a folder
     if (fs.lstatSync(commandsPath).isDirectory()) {
         const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
         
@@ -42,14 +42,14 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 (async () => {
     try {
-        console.log(`\n${colors.yellow}⏳ Meregistrasi ${commands.length} command ke Discord...${colors.reset}`);
+        console.log(`\n${colors.yellow}⏳ Register ${commands.length} command to Discord...${colors.reset}`);
 
         await rest.put(
             Routes.applicationCommands(process.env.CLIENT_ID),
             { body: commands },
         );
 
-        console.log(`${colors.green}${colors.bold}✅ BERHASIL!${colors.reset} Struktur sub-folder terbaca sempurna.`);
+        console.log(`${colors.green}${colors.bold}✅ SUCCEED!${colors.reset} The sub-folder structure is perfectly readable.`);
     } catch (error) {
         console.error(`${colors.red}❌ FAILED:${colors.reset}`, error);
     }

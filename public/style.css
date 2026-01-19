@@ -298,39 +298,39 @@ footer {
     transform: translateY(0);
 }
 
-/* Delay untuk kartu fitur agar muncul bergantian */
+/* Delay for feature cards to appear alternately */
 .feature-card:nth-child(2) { transition-delay: 0.2s; }
 .feature-card:nth-child(3) { transition-delay: 0.4s; }
 
-/* Container Utama */
+/* Main Container */
 .container {
-    width: 90%; /* Jangan 100% agar ada jarak di pinggir */
+    width: 90%; /* Don't do 100% so there is space on the edge. */
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
 }
 
-/* Membuat Layout Tombol/Fitur Otomatis Menyesuaikan */
+/* Make Button/Feature Layout Automatically Adjust */
 .features-grid {
     display: flex;
-    flex-wrap: wrap; /* Ini kuncinya: otomatis pindah baris jika tidak muat */
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
 }
 
-/* Khusus Tampilan HP (Layar di bawah 768px) */
+/* Mobile Display Only (Screen below 768px) */
 @media (max-width: 768px) {
     h1 {
-        font-size: 1.8rem; /* Ukuran teks judul lebih kecil di HP */
+        font-size: 1.8rem; /* Title text size is smaller on mobile */
     }
     
     .button-group {
-        flex-direction: column; /* Tombol berderet ke bawah, bukan ke samping */
+        flex-direction: column; /* The buttons are aligned downwards, not sideways. */
         width: 100%;
     }
 
     .card {
-        width: 100%; /* Card fitur jadi full lebar layar */
+        width: 100%; /* Card feature becomes full screen width */
     }
 }

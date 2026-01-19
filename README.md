@@ -10,7 +10,7 @@
 ---
 
 ### ✦ Overview ✦
-SlavyBot adalah solusi pesan tetap (Sticky Message) generasi terbaru yang dirancang untuk stabilitas tinggi dan kemudahan kustomisasi. Memastikan pengumuman penting Anda selalu berada di posisi paling bawah channel, tetap terlihat, dan tetap profesional.
+SlavyBot is a next-generation sticky messaging solution designed for high stability and easy customization. Ensure your important announcements are always at the top of your mind.
 
 [ **Invite SlavyBot** ] — [ **Support Server** ] — [ **Documentation** ]
 
@@ -19,24 +19,25 @@ SlavyBot adalah solusi pesan tetap (Sticky Message) generasi terbaru yang diranc
 ---
 
 ## 🔱 Key Architectures
-SlavyBot dibangun dengan standar industri untuk memastikan performa maksimal bagi bot publik:
+SlavyBot is built to industry standards to ensure maximum performance for public bots:
 
-* **Recursive Command Handler:** Memungkinkan manajemen ribuan perintah dalam sub-folder terorganisir.
-* **Persistent Cloud Storage:** Menggunakan MongoDB Atlas untuk sinkronisasi data antar-server secara real-time.
-* **Smart Message Recycling:** Logika penghapusan otomatis cerdas untuk menjaga kebersihan channel tanpa menumpuk pesan lama.
+* **Recursive Command Handler:** Allows management of thousands of commands in organized sub-folders.
+* **Persistent Cloud Storage:** Using MongoDB Atlas for real-time data synchronization between servers.
+* **Smart Message Recycling:** Smart auto-delete logic to keep channels clean without accumulating old messages.
 
 ---
 
 ## 🛠️ Infrastructure Setup
 
 ### 1. Requirements
-* Node.js **16.11.0** atau versi lebih tinggi.
-* Instance MongoDB (Atlas atau Lokal).
-* Token Discord Bot melalui [Developer Portal](https://discord.com/developers/applications).
+* Node.js **16.11.0** or higher version.
+* Instance MongoDB (Atlas or Local).
+* Discord Bot Token via [Developer Portal](https://discord.com/developers/applications).
 
 ### 2. Environment Variables (`.env`)
-Pastikan variabel berikut terdefinisi dengan benar untuk mengaktifkan konektivitas database:
+Make sure the following variables are defined correctly to enable database connectivity:
 ```env
-TOKEN         = "Your_Discord_Bot_Token"
-CLIENT_ID     = "Your_Application_ID"
-MONGODB_URI   = "mongodb+srv://user:pass@cluster.mongodb.net/dbname"
+TOKEN         = "YOUR_DISCORD_BOT_TOKEN"
+CLIENT_ID     = "YOUR_APPLICATION_ID"
+OWNER_ID     = "YOUR_USER_ID"
+MONGODB_URI   = "YOUR_MONGODB_URI"
