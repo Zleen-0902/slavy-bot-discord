@@ -30,6 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.add('reveal-hidden'); // Apply initial hidden state
         observer.observe(el);
     });
+
+    // --- NEW: Mobile Menu Logic (Sinkron dengan index.html baru) ---
+    const menuToggle = document.getElementById('mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            // Opsional: Ubah ikon bars jadi times (X) saat aktif
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+    }
 });
 
 // --- 2. Navbar Dynamic Styling ---
@@ -55,6 +69,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         const target = document.querySelector(targetId);
         if (target) {
+            // Tutup menu mobile jika link diklik (agar tidak menutupi layar)
+            const navMenu = document.querySelector('.nav-menu');
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                const icon = document.querySelector('.menu-toggle i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
+
             window.scrollTo({
                 top: target.offsetTop - 80, // Offset to prevent navbar overlap
                 behavior: 'smooth'
