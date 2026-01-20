@@ -1,0 +1,72 @@
+/*
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⠀⠀⠀⢠⣾⣧⣤⡖⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠋⠀⠉⠀⢄⣸⣿⣿⣿⣿⣿⣥⡤⢶⣿⣦⣀⡀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡆⠀⠀⠀⣙⣛⣿⣿⣿⣿⡏⠀⠀⣀⣿⣿⣿⡟
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠷⣦⣤⣤⣬⣽⣿⣿⣿⣿⣿⣿⣿⣟⠛⠿⠋⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠋⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⡆⠀⠀
+⠀⠀⠀⠀⣠⣶⣶⣶⣿⣦⡀⠘⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋⠈⢹⡏⠁⠀⠀
+⠀⠀⠀⢀⣿⡏⠉⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡆⠀⢀⣿⡇⠀⠀⠀
+⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡘⣿⣿⣃⠀⠀⠀
+⣴⣷⣀⣸⣿⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠹⣿⣯⣤⣾⠏⠉⠉⠉⠙⠢⠀
+⠈⠙⢿⣿⡟⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣄⠛⠉⢩⣷⣴⡆⠀⠀⠀⠀⠀
+⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣀⡠⠋⠈⢿⣇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+--------------------------------------------
+👑 Owner    : Enzzyx
+📡 Discord  : https://discord.gg/QYVcWZbBp
+🛠️ Studio   : Hazz Wave Studio
+✅ Verified | 🧩 Flexible | ⚙️ Stable
+--------------------------------------------
+> © 2026 Enzzyx || Hazz Wave Studio || Slavy
+--------------------------------------------
+*/
+
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const GuildConfig = require('../../models/GuildConfig');
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('toggle-antilink')
+        .setDescription('🛡️ Turn Anti-Link protection on/off')
+        .addBooleanOption(option => 
+            option.setName('status')
+                .setDescription('Select True for ON, False for OFF')
+                .setRequired(true))
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+
+    async execute(interaction) {
+        const status = interaction.options.getBoolean('status');
+        
+        // Initial defer to prevent timeout
+        await interaction.deferReply();
+
+        try {
+            // Saving anti-link status to MongoDB database
+            await GuildConfig.findOneAndUpdate(
+                { guildId: interaction.guild.id },
+                { antiLink: status },
+                { upsert: true }
+            );
+
+            const embed = new EmbedBuilder()
+                .setTitle('🛡️ Auto-Mod System')
+                .setColor(status ? '#2ecc71' : '#ff4757') // Green if ON, Red if OFF
+                .setDescription(`The **Anti-Link** feature is now **${status ? 'ENABLED' : 'DISABLED'}**.`)
+                .setFooter({ text: 'Slavy Security System • Configuration Updated' })
+                .setTimestamp();
+            
+            // Sending the success response
+            await interaction.editReply({ embeds: [embed] });
+        } catch (error) {
+            console.error(error);
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff4757')
+                .setDescription('❌ Failed to update configuration in the database.');
+
+            // Sending the error response
+            await interaction.editReply({ embeds: [errorEmbed] });
+        }
+    }
+};

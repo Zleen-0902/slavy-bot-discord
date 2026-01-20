@@ -10,12 +10,12 @@
 */
 const mongoose = require('mongoose');
 
-const StickySchema = new mongoose.Schema({
+const guildConfigSchema = new mongoose.Schema({
     guildId: { type: String, required: true, unique: true },
-    channelId: { type: String, required: true },
-    content: { type: String, required: true },
-    isEmbed: { type: Boolean, default: false },
-    lastMessageId: { type: String, default: null }
+    logChannelId: { type: String, default: null },
+    antiLink: { type: Boolean, default: false },
+    antiSpam: { type: Boolean, default: false },
+    // Later, other features can be added, such as auto-mod toggle here.
 });
 
-module.exports = mongoose.model('Sticky', StickySchema);
+module.exports = mongoose.model('GuildConfig', guildConfigSchema);

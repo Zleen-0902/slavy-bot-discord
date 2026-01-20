@@ -155,29 +155,11 @@ h1, h2 {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* --- Floating Card Visual --- */
+/* --- Hero Visual --- */
 .hero-visual {
     position: absolute;
     bottom: 50px;
-    animation: float 6s ease-in-out infinite;
-}
-
-.floating-card {
-    background: var(--bg-card);
-    padding: 20px 40px;
-    border-radius: 15px;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.floating-card i { color: var(--gold); font-size: 1.5rem; }
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    /* Visual card logic removed to keep the interface clean */
 }
 
 /* --- Section Styling --- */
@@ -237,6 +219,7 @@ h1, h2 {
     background: var(--bg-card);
     border-radius: 15px;
     border: 1px solid var(--glass-border);
+    margin-top: 20px;
 }
 
 table {
@@ -279,11 +262,21 @@ footer {
 .socials a { color: var(--text-dim); font-size: 1.2rem; transition: 0.3s; }
 .socials a:hover { color: var(--gold); }
 
-/* --- Responsiveness --- */
+/* --- Responsiveness & Mobile --- */
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5rem; }
     .nav-menu { display: none; }
     .section { padding: 80px 5%; }
+    
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-gold, .btn-outline {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* --- Animation States --- */
@@ -298,39 +291,5 @@ footer {
     transform: translateY(0);
 }
 
-/* Delay for feature cards to appear alternately */
 .feature-card:nth-child(2) { transition-delay: 0.2s; }
 .feature-card:nth-child(3) { transition-delay: 0.4s; }
-
-/* Main Container */
-.container {
-    width: 90%; /* Don't do 100% so there is space on the edge. */
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Make Button/Feature Layout Automatically Adjust */
-.features-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-/* Mobile Display Only (Screen below 768px) */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.8rem; /* Title text size is smaller on mobile */
-    }
-    
-    .button-group {
-        flex-direction: column; /* The buttons are aligned downwards, not sideways. */
-        width: 100%;
-    }
-
-    .card {
-        width: 100%; /* Card feature becomes full screen width */
-    }
-}

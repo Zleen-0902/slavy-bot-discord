@@ -23,39 +23,51 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder } = require('discord.js');
+const GuildConfig = require('../../models/GuildConfig');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('stick')
-        .setDescription('📌 Enabling sticky messages (default)')
-        .addStringOption(opt => opt.setName('message').setDescription('Sticky message content').setRequired(true))
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+        .setName('setlog')
+        .setDescription('📡 Set channel log for moderation activity')
+        .addChannelOption(option => 
+            option.setName('channel')
+                .setDescription('Select channel for log report')
+                .addChannelTypes(ChannelType.GuildText)
+                .setRequired(true))
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-        const content = interaction.options.getString('message');
-        const formattedContent = `━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 **STICKY MESSAGES**\n\n${content}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        const channel = interaction.options.getChannel('channel');
+        await interaction.deferReply();
 
         try {
-            // Find one and update (upsert: true means if it doesn't exist then create a new one)
-            await Sticky.findOneAndUpdate(
-                { guildId: interaction.guildId },
-                { 
-                    channelId: interaction.channelId,
-                    content: formattedContent,
-                    lastMessageId: null 
-                },
+            // Update or create a new config in MongoDB
+            await GuildConfig.findOneAndUpdate(
+                { guildId: interaction.guild.id },
+                { logChannelId: channel.id },
                 { upsert: true, new: true }
             );
 
-            return interaction.editReply({
-                content: `✅ **Success!** Creating a Sticky Message.\nChannel: <#${interaction.channelId}>`
+            const successEmbed = new EmbedBuilder()
+                .setTitle('📡 Logger System')
+                .setColor('#00ffff')
+                .setDescription(`Successfully set log channel to ${channel}. Any moderation actions will be reported here.`)
+                .setFooter({ text: 'Slavy Security System • Configuration Saved' })
+                .setTimestamp();
+            
+            await interaction.editReply({ 
+                embeds: [successEmbed] 
             });
+
         } catch (error) {
             console.error(error);
-            return interaction.editReply('❌ An error occurred in the Sticky Message');
+            
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff4757')
+                .setDescription('❌ Failed to save log configuration to database.');
+
+            interaction.editReply({ embeds: [errorEmbed] });
         }
-    },
+    }
 };

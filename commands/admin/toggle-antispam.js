@@ -23,39 +23,49 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const GuildConfig = require('../../models/GuildConfig');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('stick')
-        .setDescription('📌 Enabling sticky messages (default)')
-        .addStringOption(opt => opt.setName('message').setDescription('Sticky message content').setRequired(true))
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+        .setName('toggle-antispam')
+        .setDescription('🛡️ Turn Anti-Spam protection on/off')
+        .addBooleanOption(option => 
+            option.setName('status')
+                .setDescription('Select True for ON, False for OFF')
+                .setRequired(true))
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-        const content = interaction.options.getString('message');
-        const formattedContent = `━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 **STICKY MESSAGES**\n\n${content}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+        // Initial defer to prevent interaction timeout
+        await interaction.deferReply();
+        
+        const status = interaction.options.getBoolean('status');
 
         try {
-            // Find one and update (upsert: true means if it doesn't exist then create a new one)
-            await Sticky.findOneAndUpdate(
-                { guildId: interaction.guildId },
-                { 
-                    channelId: interaction.channelId,
-                    content: formattedContent,
-                    lastMessageId: null 
-                },
-                { upsert: true, new: true }
+            // Updating antiSpam status in MongoDB database
+            await GuildConfig.findOneAndUpdate(
+                { guildId: interaction.guild.id },
+                { antiSpam: status },
+                { upsert: true }
             );
 
-            return interaction.editReply({
-                content: `✅ **Success!** Creating a Sticky Message.\nChannel: <#${interaction.channelId}>`
-            });
+            const embed = new EmbedBuilder()
+                .setTitle('🛡️ Auto-Mod System')
+                .setColor(status ? '#2ecc71' : '#ff4757')
+                .setDescription(`**Anti-Spam** feature is now **${status ? 'ENABLED' : 'DISABLED'}**.`)
+                .setFooter({ text: 'Slavy Security System • Configuration Updated' })
+                .setTimestamp();
+                
+            await interaction.editReply({ embeds: [embed] });
         } catch (error) {
             console.error(error);
-            return interaction.editReply('❌ An error occurred in the Sticky Message');
+            
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff4757')
+                .setDescription('❌ Failed to update configuration in the database.');
+
+            await interaction.editReply({ embeds: [errorEmbed] });
         }
-    },
+    }
 };

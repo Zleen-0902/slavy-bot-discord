@@ -1,7 +1,7 @@
 <div align="center">
 
 # 💎 SLAVY BOT
-**"Elevate Your Discord Communication with Precision Sticky Messages"**
+**"Next-Generation Moderation & Security with Unmatched Stability"**
 
 [![Discord.js](https://img.shields.io/badge/Framework-Discord.js%20v14-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/)
 [![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
@@ -10,20 +10,30 @@
 ---
 
 ### ✦ Overview ✦
-SlavyBot is a next-generation sticky messaging solution designed for high stability and easy customization. Ensure your important announcements are always at the top of your mind.
+SlavyBot has evolved into a comprehensive **Moderation & Security solution**. No longer just a sticky messaging tool, it now offers a powerful suite of commands to protect, monitor, and manage your Discord community with high-level performance.
 
-[ **Invite SlavyBot** ] — [ **Support Server** ] — [ **Documentation** ]
+[ **Invite SlavyBot** ] — [ **Support Server** ] — [ **Website** ]
 
 </div>
 
 ---
 
 ## 🔱 Key Architectures
-SlavyBot is built to industry standards to ensure maximum performance for public bots:
+SlavyBot is built to industry standards to ensure maximum performance for professional communities:
 
-* **Recursive Command Handler:** Allows management of thousands of commands in organized sub-folders.
-* **Persistent Cloud Storage:** Using MongoDB Atlas for real-time data synchronization between servers.
-* **Smart Message Recycling:** Smart auto-delete logic to keep channels clean without accumulating old messages.
+* **Advanced Moderation:** Comprehensive system including `/ban`, `/kick`, `/warn`, and `/mute` with full database history.
+* **Automated Security:** Integrated `/toggle-antilink` and `/toggle-antispam` to shield your server from raids and spam.
+* **Advance Log System:** Detailed event tracking for transparency, managed via the `/setlog` configuration.
+* **Persistent Cloud Storage:** Using **MongoDB Atlas** for secure, real-time data synchronization across all guilds.
+
+---
+
+## 📜 Commands Overview
+SlavyBot comes equipped with a diverse range of features:
+* **Moderation:** Ban, Kick, Warn/Unwarn, Mute/Unmute, Checkwarns, Clear, Slowmode.
+* **Admin:** Setlog, Toggle-Antilink, Toggle-Antispam.
+* **Utility:** AFK, Avatar, Embed, Poll, Remind, Sticky (Classic & Embed).
+* **Information:** Bot Status, Help, Server, User.
 
 ---
 
@@ -35,9 +45,9 @@ SlavyBot is built to industry standards to ensure maximum performance for public
 * Discord Bot Token via [Developer Portal](https://discord.com/developers/applications).
 
 ### 2. Environment Variables (`.env`)
-Make sure the following variables are defined correctly to enable database connectivity:
+Make sure the following variables are defined correctly to enable database and bot connectivity:
 ```env
 TOKEN         = "YOUR_DISCORD_BOT_TOKEN"
 CLIENT_ID     = "YOUR_APPLICATION_ID"
-OWNER_ID     = "YOUR_USER_ID"
+OWNER_ID      = "YOUR_USER_ID"
 MONGODB_URI   = "YOUR_MONGODB_URI"

@@ -1,11 +1,12 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, Collection, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, EmbedBuilder, Partials } = require('discord.js');
 const mongoose = require('mongoose'); 
 const Sticky = require('./models/Sticky'); 
 const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
 const connectDB = require('./mongodb.js');
+// Logger is not required here because the interaction logic has moved to events.
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,7 +30,17 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildModeration,
+        GatewayIntentBits.GuildPresences
+    ],
+    
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction
     ]
 });
 
@@ -52,18 +63,30 @@ for (const folder of commandFolders) {
     }
 }
 
-// --- Event Handler ---
+// --- Event Handler (The only system that handles Events & Interactions) ---
 const eventsPath = path.join(__dirname, 'events');
 if (fs.existsSync(eventsPath)) {
     const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
     for (const file of eventFiles) {
         const filePath = path.join(eventsPath, file);
-        const event = require(filePath);
-        if (event.name && event.execute) {
-            if (event.once) {
-                client.once(event.name, (...args) => event.execute(...args));
+        const eventData = require(filePath);
+
+        if (Array.isArray(eventData)) {
+            for (const event of eventData) {
+                if (event.name && event.execute) {
+                    if (event.once) {
+                        client.once(event.name, (...args) => event.execute(...args));
+                    } else {
+                        client.on(event.name, (...args) => event.execute(...args));
+                    }
+                }
+            }
+        } 
+        else if (eventData.name && eventData.execute) {
+            if (eventData.once) {
+                client.once(eventData.name, (...args) => eventData.execute(...args));
             } else {
-                client.on(event.name, (...args) => event.execute(...args));
+                client.on(eventData.name, (...args) => eventData.execute(...args));
             }
         }
     }

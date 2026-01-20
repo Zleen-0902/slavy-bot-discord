@@ -1,3 +1,14 @@
+/*
+--------------------------------------------
+👑 Owner    : Enzzyx
+📡 Discord  : https://discord.gg/QYVcWZbBp
+🛠️ Studio   : Hazz Wave Studio
+✅ Verified | 🧩 Flexible | ⚙️ Stable
+--------------------------------------------
+> © 2026 Enzzyx || Hazz Wave Studio || Slavy
+--------------------------------------------
+*/
+
 // --- 1. Animation Appears When Scrolling (Scroll Reveal) ---
 const observerOptions = {
     threshold: 0.15 // The element will appear when 15% of the part is visible.
@@ -11,12 +22,12 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// List all the elements you want to give a pop-up effect to.
+// Initialize reveal effects on DOM content loaded
 document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.feature-card, .section-title, .table-container, .hero-content');
     
     revealElements.forEach(el => {
-        el.classList.add('reveal-hidden'); // Provide initial status (hidden)
+        el.classList.add('reveal-hidden'); // Apply initial hidden state
         observer.observe(el);
     });
 });
@@ -39,18 +50,20 @@ window.addEventListener('scroll', () => {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return; // Ignore empty links
         
+        const target = document.querySelector(targetId);
         if (target) {
             window.scrollTo({
-                top: target.offsetTop - 80, // Offset so that it is not covered by the navbar
+                top: target.offsetTop - 80, // Offset to prevent navbar overlap
                 behavior: 'smooth'
             });
         }
     });
 });
 
-// --- 4. Interactive Effects on Buttons (Hover Glow) ---
+// --- 4. Interactive Effects on Buttons (Hover Glow Position) ---
 const buttons = document.querySelectorAll('.btn-gold');
 buttons.forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
@@ -58,6 +71,7 @@ buttons.forEach(btn => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        // Setting custom properties for CSS interaction
         btn.style.setProperty('--x', `${x}px`);
         btn.style.setProperty('--y', `${y}px`);
     });

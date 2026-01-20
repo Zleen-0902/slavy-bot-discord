@@ -10,12 +10,16 @@
 */
 const mongoose = require('mongoose');
 
-const StickySchema = new mongoose.Schema({
-    guildId: { type: String, required: true, unique: true },
-    channelId: { type: String, required: true },
-    content: { type: String, required: true },
-    isEmbed: { type: Boolean, default: false },
-    lastMessageId: { type: String, default: null }
+const warningSchema = new mongoose.Schema({
+    guildId: { type: String, required: true },
+    userId: { type: String, required: true },
+    warns: [
+        {
+            moderatorId: String,
+            reason: String,
+            timestamp: { type: Date, default: Date.now }
+        }
+    ]
 });
 
-module.exports = mongoose.model('Sticky', StickySchema);
+module.exports = mongoose.model('Warning', warningSchema);

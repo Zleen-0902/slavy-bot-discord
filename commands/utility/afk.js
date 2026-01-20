@@ -23,24 +23,46 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const User = require('../../models/User');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('unstick')
-        .setDescription('🗑️ Deleting sticky messages.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-
+        .setName('afk')
+        .setDescription('💤 Set AFK status to let others know you busy.')
+        .addStringOption(option => 
+            option.setName('reason')
+                .setDescription('Reason you are AFK (optional)')
+                .setMaxLength(100)),
+    
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+    await interaction.deferReply();
+        const reason = interaction.options.getString('reason') || 'No specific reason';
+        
+        // Save data to MongoDB
+        await User.findOneAndUpdate(
+            { userId: interaction.user.id },
+            { 
+                $set: { 
+                    'afk.is_afk': true, 
+                    'afk.reason': reason, 
+                    'afk.time': Date.now() 
+                } 
+            },
+            { upsert: true }
+        );
 
-        const deleted = await Sticky.findOneAndDelete({ guildId: interaction.guildId });
+        const afkEmbed = new EmbedBuilder()
+            .setColor('#00ffff')
+            .setAuthor({ 
+                name: `${interaction.user.username} is now AFK`, 
+                iconURL: interaction.user.displayAvatarURL() 
+            })
+            .setDescription(`📝 **Reason:** ${reason}\n\n*Slavy will notify you if someone tags you.*`)
+            .setFooter({ text: 'AFK status will automatically turn off when you return to chat.' })
+            .setTimestamp();
 
-        if (!deleted) {
-            return interaction.editReply('❌ There are no active sticky messages on this server.');
-        }
-
-        return interaction.editReply('🗑️ Sticky message successfully deleted.');
-    },
+        // Use editReply because it has been deferred in interactionCreate
+        await interaction.editReply({ embeds: [afkEmbed] });
+    }
 };

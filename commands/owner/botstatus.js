@@ -23,39 +23,46 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, ActivityType, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('stick')
-        .setDescription('📌 Enabling sticky messages (default)')
-        .addStringOption(opt => opt.setName('message').setDescription('Sticky message content').setRequired(true))
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-
+        .setName('botstatus')
+        .setDescription('🔱 Change the bot presence (Owner Only)')
+        .addStringOption(option =>
+            option.setName('type')
+                .setDescription('Type of activity')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'Playing', value: '0' },
+                    { name: 'Streaming', value: '1' },
+                    { name: 'Listening', value: '2' },
+                    { name: 'Watching', value: '3' },
+                ))
+        .addStringOption(option =>
+            option.setName('content')
+                .setDescription('The status message')
+                .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-        const content = interaction.options.getString('message');
-        const formattedContent = `━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 **STICKY MESSAGES**\n\n${content}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+    await interaction.deferReply();
+        // SECURITY: Replace with your Discord ID
+        if (interaction.user.id !== process.env.OWNER_ID) {
+            return interaction.editReply({ content: '❌ This command is restricted to the bot owner.', flags: [MessageFlags.Ephemeral] });
+        }
+
+        const type = parseInt(interaction.options.getString('type'));
+        const content = interaction.options.getString('content');
 
         try {
-            // Find one and update (upsert: true means if it doesn't exist then create a new one)
-            await Sticky.findOneAndUpdate(
-                { guildId: interaction.guildId },
-                { 
-                    channelId: interaction.channelId,
-                    content: formattedContent,
-                    lastMessageId: null 
-                },
-                { upsert: true, new: true }
-            );
-
-            return interaction.editReply({
-                content: `✅ **Success!** Creating a Sticky Message.\nChannel: <#${interaction.channelId}>`
+            await interaction.client.user.setPresence({
+                activities: [{ name: content, type: type }],
+                status: 'online',
             });
+
+            await interaction.editReply({ content: `✅ Status updated to: **${content}**`, flags: [MessageFlags.Ephemeral] });
         } catch (error) {
             console.error(error);
-            return interaction.editReply('❌ An error occurred in the Sticky Message');
+            await interaction.editReply({ content: '❌ Failed to update status.', flags: [MessageFlags.Ephemeral] });
         }
     },
 };

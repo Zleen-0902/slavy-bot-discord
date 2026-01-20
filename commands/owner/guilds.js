@@ -23,24 +23,30 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('unstick')
-        .setDescription('🗑️ Deleting sticky messages.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-
+        .setName('guilds')
+        .setDescription('🏰 Display all servers Slavy is in (Owner Only)'),
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-
-        const deleted = await Sticky.findOneAndDelete({ guildId: interaction.guildId });
-
-        if (!deleted) {
-            return interaction.editReply('❌ There are no active sticky messages on this server.');
+    await interaction.deferReply();
+        // SECURITY: Owner Only Check
+        if (interaction.user.id !== process.env.OWNER_ID) {
+            return interaction.editReply({ content: '❌ Access Denied.', flags: [MessageFlags.Ephemeral] });
         }
 
-        return interaction.editReply('🗑️ Sticky message successfully deleted.');
+        const guilds = interaction.client.guilds.cache.map(guild => 
+            `• **${guild.name}** | \`${guild.id}\` | Member: \`${guild.memberCount}\``
+        ).join('\n');
+
+        const guildEmbed = new EmbedBuilder()
+            .setTitle('🏰 Server List')
+            .setColor('#00ffff')
+            .setDescription(guilds || 'No guilds found.')
+            .setFooter({ text: `Total Servers: ${interaction.client.guilds.cache.size}` })
+            .setTimestamp();
+
+        await interaction.editReply({ embeds: [guildEmbed], flags: [MessageFlags.Ephemeral] });
     },
 };

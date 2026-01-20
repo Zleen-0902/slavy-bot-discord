@@ -23,24 +23,30 @@
 --------------------------------------------
 */
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
-const Sticky = require('../../models/Sticky');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('unstick')
-        .setDescription('🗑️ Deleting sticky messages.')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-
+        .setName('poll')
+        .setDescription('🗳️ Create a vote (Voting)')
+        .addStringOption(option => option.setName('question').setDescription('Questions or voting').setRequired(true))
+        .addStringOption(option => option.setName('option1').setDescription('Option 1').setRequired(true))
+        .addStringOption(option => option.setName('option2').setDescription('Option 2').setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+    await interaction.deferReply();
+        const question = interaction.options.getString('question');
+        const opt1 = interaction.options.getString('option1');
+        const opt2 = interaction.options.getString('option2');
 
-        const deleted = await Sticky.findOneAndDelete({ guildId: interaction.guildId });
+        const embed = new EmbedBuilder()
+            .setTitle('📊 Slavy Poll || Voting System')
+            .setDescription(`**${question}**\n\n1️⃣ ${opt1}\n2️⃣ ${opt2}`)
+            .setColor('#f1c40f')
+            .setTimestamp()
+            .setFooter({ text: `Made by ${interaction.user.username}` });
 
-        if (!deleted) {
-            return interaction.editReply('❌ There are no active sticky messages on this server.');
-        }
-
-        return interaction.editReply('🗑️ Sticky message successfully deleted.');
+        const message = await interaction.editReply({ embeds: [embed], fetchReply: true });
+        await message.react('1️⃣');
+        await message.react('2️⃣');
     },
 };

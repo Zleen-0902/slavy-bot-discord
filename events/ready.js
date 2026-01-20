@@ -1,7 +1,17 @@
+/*
+--------------------------------------------
+👑 Owner    : Enzzyx
+📡 Discord  : https://discord.gg/QYVcWZbBp
+🛠️ Studio   : Hazz Wave Studio
+✅ Verified | 🧩 Flexible | ⚙️ Stable
+--------------------------------------------
+> © 2026 Enzzyx || Hazz Wave Studio || Slavy
+--------------------------------------------
+*/
 const { ActivityType } = require('discord.js');
 
 module.exports = {
-    name: 'ready',
+    name: 'clientReady',
     once: true, 
     execute(client) {
         const color = {
@@ -24,11 +34,36 @@ module.exports = {
             console.log(`${color.green}  [GUILDS]  ${color.reset} Serve: ${client.guilds.cache.size} Server`);
             console.log(`${color.green}  [DATE]    ${color.reset}${new Date().toLocaleString()}`);
             
+            console.log(`${color.cyan}
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⠀⠀⠀⢠⣾⣧⣤⡖⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠋⠀⠉⠀⢄⣸⣿⣿⣿⣿⣿⣥⡤⢶⣿⣦⣀⡀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡆⠀⠀⠀⣙⣛⣿⣿⣿⣿⡏⠀⠀⣀⣿⣿⣿⡟
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠷⣦⣤⣤⣬⣽⣿⣿⣿⣿⣿⣿⣿⣟⠛⠿⠋⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠋⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⡆⠀⠀
+⠀⠀⠀⠀⣠⣶⣶⣶⣿⣦⡀⠘⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋⠈⢹⡏⠁⠀⠀
+⠀⠀⠀⢀⣿⡏⠉⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡆⠀⢀⣿⡇⠀⠀⠀
+⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡘⣿⣿⣃⠀⠀⠀
+⣴⣷⣀⣸⣿⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠹⣿⣯⣤⣾⠏⠉⠉⠉⠙⠢⠀
+⠈⠙⢿⣿⡟⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣄⠛⠉⢩⣷⣴⡆⠀⠀⠀⠀⠀
+⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣀⡠⠋⠈⢿⣇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+            ${color.reset}`);
+
+            console.log(divider);
+            console.log(`${color.cyan}👑 Owner    : ${color.reset}Enzzyx`);
+            console.log(`${color.cyan}📡 Discord   : ${color.reset}https://discord.gg/QYVcWZbBp`);
+            console.log(`${color.cyan}🛠️ Studio    : ${color.reset}Hazz Wave Studio`);
+            console.log(`${color.yellow}✅ Verified | ⚡ Flexible | ⚙️ Stable${color.reset}`);
+            console.log(divider);
+            console.log(`${color.bold}> © 2026 Enzzyx || Hazz Wave Studio || Slavy${color.reset}`);
+            console.log(divider);
+            
             // --- SET ACTIVITY & STATUS ---
 // Set Sadrah Listening - For Revenge and Status
             client.user.setPresence({
                 activities: [{ 
-                    name: 'Sadrah - For Revenge', 
+                    name: '🎶 Sadrah - For Revenge', 
                     type: ActivityType.Listening 
                 }],
                 status: 'dnd', 

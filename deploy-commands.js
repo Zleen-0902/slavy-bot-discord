@@ -17,13 +17,12 @@ const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
 console.log(`${colors.cyan}${colors.bold}=================================================${colors.reset}`);
-console.log(`${colors.bold}          SLAVY BOT - ADVANCED DEPLOYER${colors.reset}`);
+console.log(`${colors.bold}          SLAVY BOT - GLOBAL DEPLOYER${colors.reset}`);
 console.log(`${colors.cyan}=================================================${colors.reset}`);
 
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
     
-    // Make sure what is being read is a folder
     if (fs.lstatSync(commandsPath).isDirectory()) {
         const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
         
@@ -42,14 +41,18 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 (async () => {
     try {
-        console.log(`\n${colors.yellow}⏳ Register ${commands.length} command to Discord...${colors.reset}`);
+        const clientId = process.env.CLIENT_ID;
+
+        // GLOBAL MODE: Immediately register all commands publicly
+        console.log(`\n${colors.yellow}⏳ Registering ${commands.length} commands GLOBALLY...${colors.reset}`);
+        console.log(`${colors.yellow}ℹ️  Note: Global commands might take a few minutes to appear in all servers.${colors.reset}`);
 
         await rest.put(
-            Routes.applicationCommands(process.env.CLIENT_ID),
+            Routes.applicationCommands(clientId),
             { body: commands },
         );
 
-        console.log(`${colors.green}${colors.bold}✅ SUCCEED!${colors.reset} The sub-folder structure is perfectly readable.`);
+        console.log(`${colors.green}${colors.bold}✅ SUCCEED!${colors.reset} Commands are now live globally.`);
     } catch (error) {
         console.error(`${colors.red}❌ FAILED:${colors.reset}`, error);
     }
